@@ -353,7 +353,7 @@ bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
             }
             io.AddMouseSourceEvent(event->motion.which == SDL_TOUCH_MOUSEID ? ImGuiMouseSource_TouchScreen : ImGuiMouseSource_Mouse);
             io.AddMousePosEvent(mouse_pos.x, mouse_pos.y);
-            return true;
+            return io.WantCaptureMouse;
         }
         case SDL_MOUSEWHEEL:
         {
@@ -370,7 +370,7 @@ bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
 #endif
             io.AddMouseSourceEvent(event->wheel.which == SDL_TOUCH_MOUSEID ? ImGuiMouseSource_TouchScreen : ImGuiMouseSource_Mouse);
             io.AddMouseWheelEvent(wheel_x, wheel_y);
-            return true;
+            return io.WantCaptureMouse;
         }
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
@@ -386,7 +386,7 @@ bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
             io.AddMouseSourceEvent(event->button.which == SDL_TOUCH_MOUSEID ? ImGuiMouseSource_TouchScreen : ImGuiMouseSource_Mouse);
             io.AddMouseButtonEvent(mouse_button, (event->type == SDL_MOUSEBUTTONDOWN));
             bd->MouseButtonsDown = (event->type == SDL_MOUSEBUTTONDOWN) ? (bd->MouseButtonsDown | (1 << mouse_button)) : (bd->MouseButtonsDown & ~(1 << mouse_button));
-            return true;
+            return io.WantCaptureMouse;
         }
         case SDL_TEXTINPUT:
         {
@@ -400,7 +400,7 @@ bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
             ImGuiKey key = ImGui_ImplSDL2_KeyEventToImGuiKey(event->key.keysym.sym, event->key.keysym.scancode);
             io.AddKeyEvent(key, (event->type == SDL_KEYDOWN));
             io.SetKeyEventNativeData(key, event->key.keysym.sym, event->key.keysym.scancode, event->key.keysym.scancode); // To support legacy indexing (<1.87 user code). Legacy backend uses SDLK_*** as indices to IsKeyXXX() functions.
-            return true;
+            return io.WantCaptureMouse;
         }
 #if SDL_HAS_DISPLAY_EVENT
         case SDL_DISPLAYEVENT:
